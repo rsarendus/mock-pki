@@ -1,5 +1,6 @@
 package ee.ristoseene.pki.mock.server.controller;
 
+import ee.ristoseene.pki.mock.server.http.HttpMethod;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
 import org.springframework.beans.factory.annotation.Autowired;

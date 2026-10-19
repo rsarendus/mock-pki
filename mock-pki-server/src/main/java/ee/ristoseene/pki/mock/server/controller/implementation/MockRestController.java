@@ -1,7 +1,7 @@
 package ee.ristoseene.pki.mock.server.controller.implementation;
 
-import ee.ristoseene.pki.mock.server.controller.HttpMethod;
 import ee.ristoseene.pki.mock.server.controller.ServiceController;
+import ee.ristoseene.pki.mock.server.http.HttpMethod;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.NonNull;

@@ -1,8 +1,8 @@
 package ee.ristoseene.pki.mock.server.controller.configuration;
 
-import ee.ristoseene.pki.mock.server.controller.HttpMethod;
 import ee.ristoseene.pki.mock.server.controller.ServiceController;
 import ee.ristoseene.pki.mock.server.factory.FactoryUtils;
+import ee.ristoseene.pki.mock.server.http.HttpMethod;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.jspecify.annotations.NullMarked;

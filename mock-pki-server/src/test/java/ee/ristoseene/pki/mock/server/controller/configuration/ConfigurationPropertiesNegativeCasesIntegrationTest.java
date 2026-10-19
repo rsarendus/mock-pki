@@ -1,7 +1,7 @@
 package ee.ristoseene.pki.mock.server.controller.configuration;
 
-import ee.ristoseene.pki.mock.server.controller.HttpMethod;
 import ee.ristoseene.pki.mock.server.controller.ServiceController;
+import ee.ristoseene.pki.mock.server.http.HttpMethod;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;

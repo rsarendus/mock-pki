@@ -1,6 +1,6 @@
 package ee.ristoseene.pki.mock.server.controller.configuration;
 
-import ee.ristoseene.pki.mock.server.controller.HttpMethod;
+import ee.ristoseene.pki.mock.server.http.HttpMethod;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
