@@ -10,5 +10,5 @@ For building this project, JDK 25 is required.
 
 More information about each individual module can be found in the following list:
 
-* [PKI Mocking Library](mock-pki-library/README.md) - Library for PKI mocking utilities
-* [PKI Mock Server](mock-pki-server/README.md) - Server for PKI mock services
+* [PKI Mocking Library](mock-pki-library) - Library for PKI mocking utilities
+* [PKI Mock Server](mock-pki-server) - Server for PKI mock services

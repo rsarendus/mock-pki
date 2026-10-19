@@ -45,7 +45,7 @@ The following examples specify a single HTTP GET endpoint on path `/example`.
 The mock service providing the endpoint is instantiated via `example.package.ExampleFactory` using the specified argument string.
 
 <details>
-<summary>Environment Variables</summary>
+<summary>Environment variables</summary>
 
 ```shell
 MOCK_ENDPOINTS_0_METHOD='GET'
