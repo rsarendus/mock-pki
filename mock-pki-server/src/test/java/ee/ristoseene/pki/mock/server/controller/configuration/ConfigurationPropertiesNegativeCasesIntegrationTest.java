@@ -33,8 +33,8 @@ class ConfigurationPropertiesNegativeCasesIntegrationTest {
     @EnumSource(HttpMethod.class)
     void missingFactoryProperty(HttpMethod httpMethod) {
         applicationContextRunner
-                .withSystemProperties(PROPERTY_KEY_METHOD + httpMethod.name())
-                .withSystemProperties(PROPERTY_PATH)
+                .withPropertyValues(PROPERTY_KEY_METHOD + httpMethod.name())
+                .withPropertyValues(PROPERTY_PATH)
                 .run(context -> assertThat(context)
                         .hasFailed()
                         .getFailure()
@@ -47,9 +47,9 @@ class ConfigurationPropertiesNegativeCasesIntegrationTest {
     @EnumSource(HttpMethod.class)
     void missingFactoryTypeProperty(HttpMethod httpMethod) {
         applicationContextRunner
-                .withSystemProperties(PROPERTY_FACTORY_ARGUMENT)
-                .withSystemProperties(PROPERTY_KEY_METHOD + httpMethod.name())
-                .withSystemProperties(PROPERTY_PATH)
+                .withPropertyValues(PROPERTY_FACTORY_ARGUMENT)
+                .withPropertyValues(PROPERTY_KEY_METHOD + httpMethod.name())
+                .withPropertyValues(PROPERTY_PATH)
                 .run(context -> assertThat(context)
                         .hasFailed()
                         .getFailure()
@@ -62,9 +62,9 @@ class ConfigurationPropertiesNegativeCasesIntegrationTest {
     @EnumSource(HttpMethod.class)
     void invalidFactoryTypeProperty(HttpMethod httpMethod) {
         applicationContextRunner
-                .withSystemProperties(PROPERTY_KEY_FACTORY_TYPE + "FooBar")
-                .withSystemProperties(PROPERTY_KEY_METHOD + httpMethod.name())
-                .withSystemProperties(PROPERTY_PATH)
+                .withPropertyValues(PROPERTY_KEY_FACTORY_TYPE + "FooBar")
+                .withPropertyValues(PROPERTY_KEY_METHOD + httpMethod.name())
+                .withPropertyValues(PROPERTY_PATH)
                 .run(context -> assertThat(context)
                         .hasFailed()
                         .getFailure()
@@ -75,8 +75,8 @@ class ConfigurationPropertiesNegativeCasesIntegrationTest {
     @Test
     void missingMethodProperty() {
         applicationContextRunner
-                .withSystemProperties(PROPERTY_FACTORY_TYPE)
-                .withSystemProperties(PROPERTY_PATH)
+                .withPropertyValues(PROPERTY_FACTORY_TYPE)
+                .withPropertyValues(PROPERTY_PATH)
                 .run(context -> assertThat(context)
                         .hasFailed()
                         .getFailure()
@@ -88,9 +88,9 @@ class ConfigurationPropertiesNegativeCasesIntegrationTest {
     @Test
     void invalidMethodProperty() {
         applicationContextRunner
-                .withSystemProperties(PROPERTY_FACTORY_TYPE)
-                .withSystemProperties(PROPERTY_KEY_METHOD + "INVALID")
-                .withSystemProperties(PROPERTY_PATH)
+                .withPropertyValues(PROPERTY_FACTORY_TYPE)
+                .withPropertyValues(PROPERTY_KEY_METHOD + "INVALID")
+                .withPropertyValues(PROPERTY_PATH)
                 .run(context -> assertThat(context)
                         .hasFailed()
                         .getFailure()
@@ -105,8 +105,8 @@ class ConfigurationPropertiesNegativeCasesIntegrationTest {
     @EnumSource(HttpMethod.class)
     void missingPathProperty(HttpMethod httpMethod) {
         applicationContextRunner
-                .withSystemProperties(PROPERTY_FACTORY_TYPE)
-                .withSystemProperties(PROPERTY_KEY_METHOD + httpMethod.name())
+                .withPropertyValues(PROPERTY_FACTORY_TYPE)
+                .withPropertyValues(PROPERTY_KEY_METHOD + httpMethod.name())
                 .run(context -> assertThat(context)
                         .hasFailed()
                         .getFailure()

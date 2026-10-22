@@ -1,6 +1,7 @@
 package ee.ristoseene.pki.mock.server.controller.implementation;
 
 import ee.ristoseene.pki.mock.server.controller.ControllerOutput;
+import ee.ristoseene.pki.mock.server.http.header.MutableHeaders;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -12,7 +13,7 @@ import java.io.OutputStream;
 
 @NullMarked
 @RequiredArgsConstructor
-class HttpServletResponseControllerOutput implements ControllerOutput, ControllerOutput.Provider {
+class HttpServletResponseControllerOutput implements ControllerOutput, ControllerOutput.Provider, MutableHeaders {
 
     private final @NonNull HttpServletResponse httpServletResponse;
 
@@ -23,11 +24,22 @@ class HttpServletResponseControllerOutput implements ControllerOutput, Controlle
     }
 
     @Override
+    public MutableHeaders getHttpHeaders() {
+        return this;
+    }
+
+    @Override
     public OutputStream openOutputStream(@Nullable Long outputLength) throws IOException {
         if (outputLength != null) {
             httpServletResponse.setContentLengthLong(outputLength);
         }
         return httpServletResponse.getOutputStream();
+    }
+
+    @Override
+    public MutableHeaders setHeader(String name, String value) {
+        httpServletResponse.setHeader(name, value);
+        return this;
     }
 
 }

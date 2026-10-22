@@ -1,0 +1,484 @@
+mock:
+  endpoints:
+
+    ####################################################################################
+    # Explicit response header handling.                                               #
+    # HTTP 200 OK status code.                                                         #
+    ####################################################################################
+
+    # Explicitly configured NoOpResponseHeadersConfigurerFactory
+    # using literal style block scalar to format the factory argument string as indentation based block style YAML
+    - method: GET
+      path: respond-200-explicitly-no-headers-1
+      factory:
+        type: ee.ristoseene.pki.mock.server.service.generic.factory.EmptyResponseServiceControllerFactory
+        argument: |
+          httpStatus: 200
+          httpHeadersConfigurerFactory:
+            type: ee.ristoseene.pki.mock.server.http.header.factory.NoOpResponseHeadersConfigurerFactory
+            argument: this should be ignored
+
+    # Explicitly configured NoOpResponseHeadersConfigurerFactory
+    # using compact inline YAML-formatted factory argument string
+    - method: GET
+      path: respond-200-explicitly-no-headers-2
+      factory:
+        type: ee.ristoseene.pki.mock.server.service.generic.factory.EmptyResponseServiceControllerFactory
+        argument: '{httpStatus: 200, httpHeadersConfigurerFactory: {type: ee.ristoseene.pki.mock.server.http.header.factory.NoOpResponseHeadersConfigurerFactory}}'
+
+    # Explicitly configured NoOpResponseHeadersConfigurerFactory
+    # using compact inline JSON-formatted factory argument string
+    - method: GET
+      path: respond-200-explicitly-no-headers-3
+      factory:
+        type: ee.ristoseene.pki.mock.server.service.generic.factory.EmptyResponseServiceControllerFactory
+        argument: '{"httpStatus": 200, "httpHeadersConfigurerFactory": {"type": "ee.ristoseene.pki.mock.server.http.header.factory.NoOpResponseHeadersConfigurerFactory"}}'
+
+    ####################################################################################
+    # Default response header handling (no response header configurer explicitly set). #
+    # Common HTTP 2xx success status codes.                                            #
+    ####################################################################################
+
+    # HTTP 200 OK
+    - method: GET
+      path: respond-200
+      factory:
+        type: ee.ristoseene.pki.mock.server.service.generic.factory.EmptyResponseServiceControllerFactory
+        argument: |
+          httpStatus: 200
+
+    # HTTP 201 Created
+    - method: GET
+      path: respond-201
+      factory:
+        type: ee.ristoseene.pki.mock.server.service.generic.factory.EmptyResponseServiceControllerFactory
+        argument: |
+          httpStatus: 201
+
+    # HTTP 202 Accepted
+    - method: GET
+      path: respond-202
+      factory:
+        type: ee.ristoseene.pki.mock.server.service.generic.factory.EmptyResponseServiceControllerFactory
+        argument: |
+          httpStatus: 202
+
+    # HTTP 203 Non-Authoritative Information
+    - method: GET
+      path: respond-203
+      factory:
+        type: ee.ristoseene.pki.mock.server.service.generic.factory.EmptyResponseServiceControllerFactory
+        argument: |
+          httpStatus: 203
+
+    # HTTP 204 No Content
+    - method: GET
+      path: respond-204
+      factory:
+        type: ee.ristoseene.pki.mock.server.service.generic.factory.EmptyResponseServiceControllerFactory
+        argument: |
+          httpStatus: 204
+
+    # HTTP 205 Reset Content
+    - method: GET
+      path: respond-205
+      factory:
+        type: ee.ristoseene.pki.mock.server.service.generic.factory.EmptyResponseServiceControllerFactory
+        argument: |
+          httpStatus: 205
+
+    # HTTP 206 Partial Content
+    - method: GET
+      path: respond-206
+      factory:
+        type: ee.ristoseene.pki.mock.server.service.generic.factory.EmptyResponseServiceControllerFactory
+        argument: |
+          httpStatus: 206
+
+    ####################################################################################
+    # Default response header handling (no response header configurer explicitly set). #
+    # Common HTTP 3xx redirection status codes.                                        #
+    ####################################################################################
+
+    # HTTP 300 Multiple Choices
+    - method: GET
+      path: respond-300
+      factory:
+        type: ee.ristoseene.pki.mock.server.service.generic.factory.EmptyResponseServiceControllerFactory
+        argument: |
+          httpStatus: 300
+
+    # HTTP 301 Moved Permanently
+    - method: GET
+      path: respond-301
+      factory:
+        type: ee.ristoseene.pki.mock.server.service.generic.factory.EmptyResponseServiceControllerFactory
+        argument: |
+          httpStatus: 301
+
+    # HTTP 302 Found
+    - method: GET
+      path: respond-302
+      factory:
+        type: ee.ristoseene.pki.mock.server.service.generic.factory.EmptyResponseServiceControllerFactory
+        argument: |
+          httpStatus: 302
+
+    # HTTP 303 See Other
+    - method: GET
+      path: respond-303
+      factory:
+        type: ee.ristoseene.pki.mock.server.service.generic.factory.EmptyResponseServiceControllerFactory
+        argument: |
+          httpStatus: 303
+
+    # HTTP 304 Not Modified
+    - method: GET
+      path: respond-304
+      factory:
+        type: ee.ristoseene.pki.mock.server.service.generic.factory.EmptyResponseServiceControllerFactory
+        argument: |
+          httpStatus: 304
+
+    # HTTP 305 Use Proxy
+    - method: GET
+      path: respond-305
+      factory:
+        type: ee.ristoseene.pki.mock.server.service.generic.factory.EmptyResponseServiceControllerFactory
+        argument: |
+          httpStatus: 305
+
+    # HTTP 306 Switch Proxy
+    - method: GET
+      path: respond-306
+      factory:
+        type: ee.ristoseene.pki.mock.server.service.generic.factory.EmptyResponseServiceControllerFactory
+        argument: |
+          httpStatus: 306
+
+    # HTTP 307 Temporary Redirect
+    - method: GET
+      path: respond-307
+      factory:
+        type: ee.ristoseene.pki.mock.server.service.generic.factory.EmptyResponseServiceControllerFactory
+        argument: |
+          httpStatus: 307
+
+    # HTTP 308 Permanent Redirect
+    - method: GET
+      path: respond-308
+      factory:
+        type: ee.ristoseene.pki.mock.server.service.generic.factory.EmptyResponseServiceControllerFactory
+        argument: |
+          httpStatus: 308
+
+    ####################################################################################
+    # Default response header handling (no response header configurer explicitly set). #
+    # Common HTTP 4xx client error status codes.                                       #
+    ####################################################################################
+
+    # HTTP 400 Bad Request
+    - method: GET
+      path: respond-400
+      factory:
+        type: ee.ristoseene.pki.mock.server.service.generic.factory.EmptyResponseServiceControllerFactory
+        argument: |
+          httpStatus: 400
+
+    # HTTP 401 Unauthorized
+    - method: GET
+      path: respond-401
+      factory:
+        type: ee.ristoseene.pki.mock.server.service.generic.factory.EmptyResponseServiceControllerFactory
+        argument: |
+          httpStatus: 401
+
+    # HTTP 402 Payment Required
+    - method: GET
+      path: respond-402
+      factory:
+        type: ee.ristoseene.pki.mock.server.service.generic.factory.EmptyResponseServiceControllerFactory
+        argument: |
+          httpStatus: 402
+
+    # HTTP 403 Forbidden
+    - method: GET
+      path: respond-403
+      factory:
+        type: ee.ristoseene.pki.mock.server.service.generic.factory.EmptyResponseServiceControllerFactory
+        argument: |
+          httpStatus: 403
+
+    # HTTP 404 Not Found
+    - method: GET
+      path: respond-404
+      factory:
+        type: ee.ristoseene.pki.mock.server.service.generic.factory.EmptyResponseServiceControllerFactory
+        argument: |
+          httpStatus: 404
+
+    # HTTP 405 Method Not Allowed
+    - method: GET
+      path: respond-405
+      factory:
+        type: ee.ristoseene.pki.mock.server.service.generic.factory.EmptyResponseServiceControllerFactory
+        argument: |
+          httpStatus: 405
+
+    # HTTP 406 Not Acceptable
+    - method: GET
+      path: respond-406
+      factory:
+        type: ee.ristoseene.pki.mock.server.service.generic.factory.EmptyResponseServiceControllerFactory
+        argument: |
+          httpStatus: 406
+
+    # HTTP 407 Proxy Authentication Required
+    - method: GET
+      path: respond-407
+      factory:
+        type: ee.ristoseene.pki.mock.server.service.generic.factory.EmptyResponseServiceControllerFactory
+        argument: |
+          httpStatus: 407
+
+    # HTTP 408 Request Timeout
+    - method: GET
+      path: respond-408
+      factory:
+        type: ee.ristoseene.pki.mock.server.service.generic.factory.EmptyResponseServiceControllerFactory
+        argument: |
+          httpStatus: 408
+
+    # HTTP 409 Conflict
+    - method: GET
+      path: respond-409
+      factory:
+        type: ee.ristoseene.pki.mock.server.service.generic.factory.EmptyResponseServiceControllerFactory
+        argument: |
+          httpStatus: 409
+
+    # HTTP 410 Gone
+    - method: GET
+      path: respond-410
+      factory:
+        type: ee.ristoseene.pki.mock.server.service.generic.factory.EmptyResponseServiceControllerFactory
+        argument: |
+          httpStatus: 410
+
+    # HTTP 411 Length Required
+    - method: GET
+      path: respond-411
+      factory:
+        type: ee.ristoseene.pki.mock.server.service.generic.factory.EmptyResponseServiceControllerFactory
+        argument: |
+          httpStatus: 411
+
+    # HTTP 412 Precondition Failed
+    - method: GET
+      path: respond-412
+      factory:
+        type: ee.ristoseene.pki.mock.server.service.generic.factory.EmptyResponseServiceControllerFactory
+        argument: |
+          httpStatus: 412
+
+    # HTTP 413 Content Too Large
+    - method: GET
+      path: respond-413
+      factory:
+        type: ee.ristoseene.pki.mock.server.service.generic.factory.EmptyResponseServiceControllerFactory
+        argument: |
+          httpStatus: 413
+
+    # HTTP 414 URI Too Long
+    - method: GET
+      path: respond-414
+      factory:
+        type: ee.ristoseene.pki.mock.server.service.generic.factory.EmptyResponseServiceControllerFactory
+        argument: |
+          httpStatus: 414
+
+    # HTTP 415 Unsupported Media Type
+    - method: GET
+      path: respond-415
+      factory:
+        type: ee.ristoseene.pki.mock.server.service.generic.factory.EmptyResponseServiceControllerFactory
+        argument: |
+          httpStatus: 415
+
+    # HTTP 416 Range Not Satisfiable
+    - method: GET
+      path: respond-416
+      factory:
+        type: ee.ristoseene.pki.mock.server.service.generic.factory.EmptyResponseServiceControllerFactory
+        argument: |
+          httpStatus: 416
+
+    # HTTP 417 Expectation Failed
+    - method: GET
+      path: respond-417
+      factory:
+        type: ee.ristoseene.pki.mock.server.service.generic.factory.EmptyResponseServiceControllerFactory
+        argument: |
+          httpStatus: 417
+
+    # HTTP 418 I'm a teapot
+    - method: GET
+      path: respond-418
+      factory:
+        type: ee.ristoseene.pki.mock.server.service.generic.factory.EmptyResponseServiceControllerFactory
+        argument: |
+          httpStatus: 418
+
+    # HTTP 421 Misdirected Request
+    - method: GET
+      path: respond-421
+      factory:
+        type: ee.ristoseene.pki.mock.server.service.generic.factory.EmptyResponseServiceControllerFactory
+        argument: |
+          httpStatus: 421
+
+    # HTTP 422 Unprocessable Content
+    - method: GET
+      path: respond-422
+      factory:
+        type: ee.ristoseene.pki.mock.server.service.generic.factory.EmptyResponseServiceControllerFactory
+        argument: |
+          httpStatus: 422
+
+    # HTTP 425 Too Early
+    - method: GET
+      path: respond-425
+      factory:
+        type: ee.ristoseene.pki.mock.server.service.generic.factory.EmptyResponseServiceControllerFactory
+        argument: |
+          httpStatus: 425
+
+    # HTTP 426 Upgrade Required
+    - method: GET
+      path: respond-426
+      factory:
+        type: ee.ristoseene.pki.mock.server.service.generic.factory.EmptyResponseServiceControllerFactory
+        argument: |
+          httpStatus: 426
+
+    # HTTP 428 Precondition Required
+    - method: GET
+      path: respond-428
+      factory:
+        type: ee.ristoseene.pki.mock.server.service.generic.factory.EmptyResponseServiceControllerFactory
+        argument: |
+          httpStatus: 428
+
+    # HTTP 429 Too Many Requests
+    - method: GET
+      path: respond-429
+      factory:
+        type: ee.ristoseene.pki.mock.server.service.generic.factory.EmptyResponseServiceControllerFactory
+        argument: |
+          httpStatus: 429
+
+    # HTTP 431 Request Header Fields Too Large
+    - method: GET
+      path: respond-431
+      factory:
+        type: ee.ristoseene.pki.mock.server.service.generic.factory.EmptyResponseServiceControllerFactory
+        argument: |
+          httpStatus: 431
+
+    # HTTP 451 Unavailable For Legal Reasons
+    - method: GET
+      path: respond-451
+      factory:
+        type: ee.ristoseene.pki.mock.server.service.generic.factory.EmptyResponseServiceControllerFactory
+        argument: |
+          httpStatus: 451
+
+    ####################################################################################
+    # Default response header handling (no response header configurer explicitly set). #
+    # Common HTTP 5xx server error status codes.                                       #
+    ####################################################################################
+
+    # HTTP 500 Internal Server Error
+    - method: GET
+      path: respond-500
+      factory:
+        type: ee.ristoseene.pki.mock.server.service.generic.factory.EmptyResponseServiceControllerFactory
+        argument: |
+          httpStatus: 500
+
+    # HTTP 501 Not Implemented
+    - method: GET
+      path: respond-501
+      factory:
+        type: ee.ristoseene.pki.mock.server.service.generic.factory.EmptyResponseServiceControllerFactory
+        argument: |
+          httpStatus: 501
+
+    # HTTP 502 Bad Gateway
+    - method: GET
+      path: respond-502
+      factory:
+        type: ee.ristoseene.pki.mock.server.service.generic.factory.EmptyResponseServiceControllerFactory
+        argument: |
+          httpStatus: 502
+
+    # HTTP 503 Service Unavailable
+    - method: GET
+      path: respond-503
+      factory:
+        type: ee.ristoseene.pki.mock.server.service.generic.factory.EmptyResponseServiceControllerFactory
+        argument: |
+          httpStatus: 503
+
+    # HTTP 504 Gateway Timeout
+    - method: GET
+      path: respond-504
+      factory:
+        type: ee.ristoseene.pki.mock.server.service.generic.factory.EmptyResponseServiceControllerFactory
+        argument: |
+          httpStatus: 504
+
+    # HTTP 505 HTTP Version Not Supported
+    - method: GET
+      path: respond-505
+      factory:
+        type: ee.ristoseene.pki.mock.server.service.generic.factory.EmptyResponseServiceControllerFactory
+        argument: |
+          httpStatus: 505
+
+    # HTTP 506 Variant Also Negotiates
+    - method: GET
+      path: respond-506
+      factory:
+        type: ee.ristoseene.pki.mock.server.service.generic.factory.EmptyResponseServiceControllerFactory
+        argument: |
+          httpStatus: 506
+
+    # HTTP 510 Not Extended
+    - method: GET
+      path: respond-510
+      factory:
+        type: ee.ristoseene.pki.mock.server.service.generic.factory.EmptyResponseServiceControllerFactory
+        argument: |
+          httpStatus: 510
+
+    # HTTP 511 Network Authentication Required
+    - method: GET
+      path: respond-511
+      factory:
+        type: ee.ristoseene.pki.mock.server.service.generic.factory.EmptyResponseServiceControllerFactory
+        argument: |
+          httpStatus: 511
+
+    ####################################################################################
+    # Default response header handling (no response header configurer explicitly set). #
+    # Custom HTTP status codes.                                                        #
+    ####################################################################################
+
+    # HTTP 999
+    - method: GET
+      path: respond-999
+      factory:
+        type: ee.ristoseene.pki.mock.server.service.generic.factory.EmptyResponseServiceControllerFactory
+        argument: |
+          httpStatus: 999
