@@ -8,7 +8,6 @@ import org.jspecify.annotations.NullMarked;
 import java.util.function.Consumer;
 
 /// A factory for creating instances of HTTP response configurer implementations that emit no HTTP headers.
-/// The implementation is guaranteed to not interact with response headers in any way.
 @Slf4j
 @NullMarked
 public class NoOpResponseHeadersConfigurerFactory extends AbstractNoInputFactory<Consumer<MutableHeaders>> {

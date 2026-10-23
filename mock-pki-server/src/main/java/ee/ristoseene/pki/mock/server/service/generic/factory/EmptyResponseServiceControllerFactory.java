@@ -27,9 +27,9 @@ import java.util.function.Consumer;
 /// The argument string of the factory is expected to be in JSON/YAML format, specifying the following properties:
 ///
 /// * `httpHeadersConfigurerFactory.argument` (String) - The argument string that is passed to the factory.
-///   The presence and format depends on the factory implementation.
+///   Requirement and format depend on the factory implementation.
 /// * `httpHeadersConfigurerFactory.type` (String) - The fully qualified class name of the factory implementation used to instantiate configurers emitting HTTP response headers.
-///   Defaults to {@link ee.ristoseene.pki.mock.server.http.header.factory.NoOpResponseHeadersConfigurerFactory} if not specified.
+///   Optional; defaults to {@link ee.ristoseene.pki.mock.server.http.header.factory.NoOpResponseHeadersConfigurerFactory}.
 /// * `httpStatus` (Number) - HTTP status code of emitted responses. Must be in the range of `[100..999]`.
 @Slf4j
 @NullMarked

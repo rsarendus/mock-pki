@@ -3,7 +3,7 @@
 A configurable server application for mocking PKI services.
 
 * [Prerequisites](#prerequisites)
-* [Build and Run](#build-and-run)
+* [Build and run](#build-and-run)
 * [Configuration](#configuration)
   - [Nested JSON/YAML configuration](#nested-jsonyaml-configuration)
   - [Mock service factories](#mock-service-factories)
@@ -13,7 +13,7 @@ A configurable server application for mocking PKI services.
 
 ## Prerequisites
 
-For general prerequisites, see [here](../README.md#prerequisites).
+See the [general prerequisites](../README.md#prerequisites).
 
 ## Build and run
 
@@ -30,25 +30,23 @@ To run the application from the base directory of the project, run the following
 java -jar mock-pki-server/target/mock-pki-server.jar --spring.config.additional-location=file:/path/to/your/configuration-file
 ```
 
-Information about alternative ways of configuring a Spring Boot application externally,
-can be found [here](https://docs.spring.io/spring-boot/reference/features/external-config.html).
+For other ways to configure a Spring Boot application externally,
+see the [Spring Boot externalized configuration documentation](https://docs.spring.io/spring-boot/reference/features/external-config.html).
 
 ## Configuration
 
-The mock services and the endpoints they provide, can be configured via the following properties.
-For common Spring Boot properties see [here](https://docs.spring.io/spring-boot/appendix/application-properties/index.html).
+The mock services and the endpoints they provide can be configured via the following properties.
+For common Spring Boot application properties, see the [Spring Boot documentation](https://docs.spring.io/spring-boot/appendix/application-properties/index.html).
 
 | Property | Required | Type | Description |
 | --- | --- | --- | --- |
-| `mock.endpoints` | - | Array | A list of property-blocks specifying the endpoints of each mock service. Defaults to an empty list if not provided. |
-| `mock.endpoints[i].factory.argument` | ? | String | The argument string that is passed to the factory. The presence and format depends on the factory* implementation. |
-| `mock.endpoints[i].factory.type` | + | String | The fully qualified class name of the factory* implementation used to instantiate the mock service providing the endpoint. |
+| `mock.endpoints` | - | Array | A list of endpoint definitions for each mock service. Optional; defaults to an empty list. |
+| `mock.endpoints[i].factory.argument` | ? | String | The argument string that is passed to the factory. Requirement and format depend on the [mock service factory implementation](#mock-service-factories). |
+| `mock.endpoints[i].factory.type` | + | String | The fully qualified class name of the [mock service factory implementation](#mock-service-factories) used to instantiate the mock service providing the endpoint. |
 | `mock.endpoints[i].method` | + | String | The HTTP method of the endpoint. Supported values: `GET`. |
 | `mock.endpoints[i].path` | + | String | The path of the endpoint. |
 
-\* A list of available mock service factories can be found [here](#mock-service-factories).
-
-The following examples specify a single HTTP GET endpoint on path `/example`.
+The following examples define a single HTTP GET endpoint on path `/example`.
 The mock service providing the endpoint is instantiated via `example.package.ExampleFactory` using the specified argument string.
 
 <details>
@@ -89,8 +87,8 @@ mock:
 
 ### Nested JSON/YAML configuration
 
-Factories that require multiple units of information passed into them, expect YAML (or JSON) formatted argument strings.
-The following examples
+Factories that need more than one input expect a YAML- or JSON-formatted argument string.
+The following examples show how to pass nested configuration as an argument string in each configuration format.
 
 <details>
 <summary>Environment variables</summary>
@@ -125,8 +123,8 @@ Compact inline YAML or JSON can be assigned to argument string properties.
 <details>
 <summary>YAML</summary>
 
-The most convenient way to insert nested YAML into an argument string, is to use the literal style block (denoted by the block header indicator `|`).
-This enables the argument string to be formatted as indentation based block style YAML.
+The most convenient way to insert nested YAML into an argument string is to use the literal block scalar (`|`).
+This enables the argument string to be formatted as indentation-based block style YAML.
 
 ```yaml
 ...:
@@ -151,11 +149,9 @@ Alternatively, compact inline YAML or JSON can be assigned to argument string pr
 
 ### Mock service factories
 
-Factories instantiating specific implementations of mock services.
+The following chapters list available factories meant for instantiating specific implementations of mock services.
 
 #### Generic mock service factories
-
-Factories for mock services emitting generic HTTP responses.
 
 ##### [`ee.ristoseene.pki.mock.server.service.generic.factory.EmptyResponseServiceControllerFactory`](src/main/java/ee/ristoseene/pki/mock/server/service/generic/factory/EmptyResponseServiceControllerFactory.java)
 
@@ -171,23 +167,18 @@ The argument string of the factory is expected to be in [JSON/YAML format](#nest
 
 | Property | Required | Type | Description |
 | --- | --- | --- | --- |
-| `httpHeadersConfigurerFactory.argument` | ? | String | The argument string that is passed to the factory. The presence and format depends on the factory* implementation. |
-| `httpHeadersConfigurerFactory.type` | - | String | The fully qualified class name of the factory* implementation used to instantiate configurers emitting HTTP response headers. Defaults to [`ee.ristoseene.pki.mock.server.http.header.factory.NoOpResponseHeadersConfigurerFactory`](#eeristoseenepkimockserverhttpheaderfactorynoopresponseheadersconfigurerfactory) if not specified. |
+| `httpHeadersConfigurerFactory.argument` | ? | String | The argument string that is passed to the factory. Requirement and format depend on the [response headers configurer factory implementation](#response-headers-configurer-factories). |
+| `httpHeadersConfigurerFactory.type` | - | String | The fully qualified class name of the [response headers configurer factory implementation](#response-headers-configurer-factories) used to instantiate configurers emitting HTTP response headers. Optional; defaults to [`ee.ristoseene.pki.mock.server.http.header.factory.NoOpResponseHeadersConfigurerFactory`](#eeristoseenepkimockserverhttpheaderfactorynoopresponseheadersconfigurerfactory). |
 | `httpStatus` | + | Number | HTTP status code of emitted responses. Must be in the range of `[100..999]`. |
 
-\* A list of available HTTP response headers configurer factories can be found [here](#response-headers-configurer-factories).
-
-Specific examples for configuring this factory can be found [here](src/test/resources/configuration/empty-response-service).
+A set of example configuration files for this factory can be found [under test resources](src/test/resources/configuration/empty-response-service).
 
 ### Nested factories
 
-Factories nested in the configuration of other factories.
+The following chapters list various types of factories meant for instantiating injectable subcomponents that are consumed by other factories.
 
 #### Response headers configurer factories
-
-Factories instantiating HTTP response headers configurers.
 
 ##### [`ee.ristoseene.pki.mock.server.http.header.factory.NoOpResponseHeadersConfigurerFactory`](src/main/java/ee/ristoseene/pki/mock/server/http/header/factory/NoOpResponseHeadersConfigurerFactory.java)
 
 A factory for creating instances of HTTP response configurer implementations that emit no HTTP headers.
-The implementation is guaranteed to not interact with response headers in any way.
