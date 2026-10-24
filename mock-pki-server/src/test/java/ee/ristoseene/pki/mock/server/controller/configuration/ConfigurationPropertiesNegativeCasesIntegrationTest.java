@@ -1,13 +1,12 @@
 package ee.ristoseene.pki.mock.server.controller.configuration;
 
 import ee.ristoseene.pki.mock.server.controller.ServiceController;
+import ee.ristoseene.pki.mock.server.factory.exception.FactoryTypeMismatchException;
 import ee.ristoseene.pki.mock.server.http.HttpMethod;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
 import org.springframework.boot.test.context.runner.ApplicationContextRunner;
-
-import java.util.function.Function;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -72,6 +71,25 @@ class ConfigurationPropertiesNegativeCasesIntegrationTest {
                 );
     }
 
+    @ParameterizedTest
+    @EnumSource(HttpMethod.class)
+    void incompatibleFactoryTypeProperty(HttpMethod httpMethod) {
+        applicationContextRunner
+                .withPropertyValues(PROPERTY_KEY_FACTORY_TYPE + IncompatibleFactory.class.getCanonicalName())
+                .withPropertyValues(PROPERTY_KEY_METHOD + httpMethod.name())
+                .withPropertyValues(PROPERTY_PATH)
+                .run(context -> assertThat(context)
+                        .hasFailed()
+                        .getFailure()
+                        .hasRootCauseInstanceOf(FactoryTypeMismatchException.class)
+                        .hasStackTraceContaining(
+                                "The factory type '%s' is not compatible with the expected factory type '%s'",
+                                IncompatibleFactory.class.getCanonicalName(),
+                                ServiceController.Factory.class.getCanonicalName()
+                        )
+                );
+    }
+
     @Test
     void missingMethodProperty() {
         applicationContextRunner
@@ -115,7 +133,9 @@ class ConfigurationPropertiesNegativeCasesIntegrationTest {
                 );
     }
 
-    static abstract class Factory implements Function<String, ServiceController> {
-    }
+    static abstract class Factory implements ServiceController.Factory {}
+
+    static abstract class IncompatibleFactory implements
+            ee.ristoseene.pki.mock.server.factory.Factory<ServiceController> {}
 
 }

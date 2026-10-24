@@ -1,8 +1,10 @@
 package ee.ristoseene.pki.mock.server.service.generic.factory;
 
 import ee.ristoseene.pki.mock.server.factory.configuration.AbstractApplicationContextDependantFactoryIntegrationTest;
+import ee.ristoseene.pki.mock.server.factory.exception.FactoryTypeMismatchException;
 import ee.ristoseene.pki.mock.server.factory.exception.NestedConfigurationBindException;
 import ee.ristoseene.pki.mock.server.factory.exception.NestedConfigurationBindValidationException;
+import ee.ristoseene.pki.mock.server.http.header.HeadersConfigurer;
 import ee.ristoseene.pki.mock.server.http.header.configuration.ResponseHeadersConfigurerFactoryConfigurationProperties;
 import org.apache.commons.lang3.StringUtils;
 import org.assertj.core.api.AbstractThrowableAssert;
@@ -100,10 +102,26 @@ class EmptyResponseServiceControllerFactoryConfigurationPropertiesNegativeCasesI
                 .hasStackTraceContaining("ClassNotFoundException: FooBar");
     }
 
+    @Test
+    void incompatibleHttpHeadersConfigurerFactoryTypeProperty() {
+        String argument = """
+                httpStatus: 200
+                httpHeadersConfigurerFactory:
+                  type:""" + ' ' + EmptyResponseServiceControllerFactory.class.getCanonicalName();
+
+        assertThatThrownByFactory(argument)
+                .isExactlyInstanceOf(FactoryTypeMismatchException.class)
+                .hasMessage(
+                        "The factory type '%s' is not compatible with the expected factory type '%s'",
+                        EmptyResponseServiceControllerFactory.class.getCanonicalName(),
+                        HeadersConfigurer.Factory.class.getCanonicalName()
+                );
+    }
+
     private AbstractThrowableAssert<?, ? extends Throwable> assertThatThrownByFactory(String argument) {
         AtomicReference<AbstractThrowableAssert<?, ? extends Throwable>> throwableAssert = new AtomicReference<>();
         run(factory -> throwableAssert.set(
-                assertThatThrownBy(() -> factory.apply(argument))
+                assertThatThrownBy(() -> factory.create(argument))
         ));
         return throwableAssert.get();
     }

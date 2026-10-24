@@ -2,9 +2,8 @@ package ee.ristoseene.pki.mock.server.service.generic.factory;
 
 import ee.ristoseene.pki.mock.server.controller.ServiceController;
 import ee.ristoseene.pki.mock.server.factory.AbstractYamlParsingFactory;
-import ee.ristoseene.pki.mock.server.factory.FactoryUtils;
 import ee.ristoseene.pki.mock.server.http.annotation.HttpStatusCode;
-import ee.ristoseene.pki.mock.server.http.header.MutableHeaders;
+import ee.ristoseene.pki.mock.server.http.header.HeadersConfigurer;
 import ee.ristoseene.pki.mock.server.http.header.configuration.ResponseHeadersConfigurerFactoryConfigurationProperties;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
@@ -13,8 +12,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.NullUnmarked;
 import org.springframework.context.ApplicationContext;
-
-import java.util.function.Consumer;
 
 /// A factory for creating instances of {@link ServiceController} implementations that:
 ///
@@ -33,7 +30,7 @@ import java.util.function.Consumer;
 /// * `httpStatus` (Number) - HTTP status code of emitted responses. Must be in the range of `[100..999]`.
 @Slf4j
 @NullMarked
-public class EmptyResponseServiceControllerFactory extends AbstractYamlParsingFactory<ServiceController> {
+public class EmptyResponseServiceControllerFactory extends AbstractYamlParsingFactory<ServiceController> implements ServiceController.Factory {
 
     private final ApplicationContext applicationContext;
 
@@ -44,7 +41,7 @@ public class EmptyResponseServiceControllerFactory extends AbstractYamlParsingFa
     }
 
     @Override
-    public ServiceController apply(String argument) {
+    public ServiceController create(String argument) {
         ConfigurationProperties configurationProperties = parseAndValidate(argument, ConfigurationProperties.class);
 
         final int httpStatus = configurationProperties.httpStatus();
@@ -57,12 +54,12 @@ public class EmptyResponseServiceControllerFactory extends AbstractYamlParsingFa
                 configurationProperties.httpHeadersConfigurerFactory().type().getCanonicalName()
         );
 
-        final Consumer<MutableHeaders> httpHeadersConfigurer = FactoryUtils
+        final HeadersConfigurer headersConfigurer = ResponseHeadersConfigurerFactoryConfigurationProperties.FACTORY_UTIL
                 .create(configurationProperties.httpHeadersConfigurerFactory(), applicationContext);
 
         return (input, output) -> output
                 .withHttpStatus(httpStatus)
-                .configureHttpHeaders(httpHeadersConfigurer);
+                .configureHttpHeaders(headersConfigurer);
     }
 
     @NullUnmarked

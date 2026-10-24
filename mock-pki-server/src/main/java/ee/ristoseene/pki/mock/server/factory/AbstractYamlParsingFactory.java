@@ -13,11 +13,10 @@ import org.springframework.context.ApplicationContext;
 import tools.jackson.dataformat.yaml.YAMLMapper;
 
 import java.util.Set;
-import java.util.function.Function;
 
 @NullMarked
 @RequiredArgsConstructor
-public abstract class AbstractYamlParsingFactory<R> implements Function<String, R> {
+public abstract class AbstractYamlParsingFactory<R> implements Factory<R> {
 
     private final YAMLMapper yamlMapper;
     private final Validator validator;

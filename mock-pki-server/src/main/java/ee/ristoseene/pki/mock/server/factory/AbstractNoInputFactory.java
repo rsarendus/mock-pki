@@ -6,10 +6,8 @@ import org.jspecify.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.function.Function;
-
 @NullMarked
-public abstract class AbstractNoInputFactory<R> implements Function<String, R> {
+public abstract class AbstractNoInputFactory<R> implements Factory<R> {
 
     protected final void ensureNoInput(@Nullable String argument) {
         if (StringUtils.isBlank(argument)) {

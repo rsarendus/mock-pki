@@ -1,2 +1,3 @@
 org.springframework.boot.diagnostics.FailureAnalyzer=\
+  ee.ristoseene.pki.mock.server.factory.diagnostics.FactoryExceptionFailureAnalyzer,\
   ee.ristoseene.pki.mock.server.factory.diagnostics.NestedConfigurationBindExceptionFailureAnalyzer

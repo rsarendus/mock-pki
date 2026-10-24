@@ -1,9 +1,12 @@
 package ee.ristoseene.pki.mock.server.factory.configuration;
 
+import ee.ristoseene.pki.mock.server.factory.Factory;
 import org.jspecify.annotations.NullMarked;
 
-import java.util.function.Function;
-
 @NullMarked
-public interface FactoryConfigurationProperties<T> extends InstantiableConfigurationProperties<Function<String, T>> {
+public interface FactoryConfigurationProperties<F extends Factory<? extends R>, R> {
+
+    String argument();
+    Class<? extends F> type();
+
 }

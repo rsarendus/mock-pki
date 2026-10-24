@@ -1,7 +1,6 @@
 package ee.ristoseene.pki.mock.server.controller.configuration;
 
 import ee.ristoseene.pki.mock.server.controller.ServiceController;
-import ee.ristoseene.pki.mock.server.factory.FactoryUtils;
 import ee.ristoseene.pki.mock.server.http.HttpMethod;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
@@ -69,7 +68,8 @@ class ServicesConfiguration {
 
             serviceControllers.put(
                     properties.path(),
-                    FactoryUtils.create(properties.factory(), applicationContext)
+                    ServiceFactoryConfigurationProperties.FACTORY_UTIL
+                            .create(properties.factory(), applicationContext)
             );
         }
 

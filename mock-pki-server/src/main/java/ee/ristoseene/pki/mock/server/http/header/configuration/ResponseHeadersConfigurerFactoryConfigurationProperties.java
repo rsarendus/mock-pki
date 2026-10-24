@@ -1,24 +1,28 @@
 package ee.ristoseene.pki.mock.server.http.header.configuration;
 
+import ee.ristoseene.pki.mock.server.factory.FactoryUtil;
+import ee.ristoseene.pki.mock.server.factory.TypeCheckingFactoryUtil;
 import ee.ristoseene.pki.mock.server.factory.configuration.FactoryConfigurationProperties;
-import ee.ristoseene.pki.mock.server.http.header.MutableHeaders;
+import ee.ristoseene.pki.mock.server.http.header.HeadersConfigurer;
 import ee.ristoseene.pki.mock.server.http.header.factory.NoOpResponseHeadersConfigurerFactory;
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 
-import java.util.function.Consumer;
-import java.util.function.Function;
-
 @Builder
 public record ResponseHeadersConfigurerFactoryConfigurationProperties(
         @NotNull String argument,
-        @NotNull Class<Function<String, Consumer<MutableHeaders>>> type
+        @NotNull Class<? extends HeadersConfigurer.Factory> type
 ) implements
-        FactoryConfigurationProperties<Consumer<MutableHeaders>>
+        FactoryConfigurationProperties<HeadersConfigurer.Factory, HeadersConfigurer>
 {
-    @SuppressWarnings({"rawtypes", "unchecked"})
+    public static final FactoryUtil<HeadersConfigurer.Factory, HeadersConfigurer> FACTORY_UTIL = TypeCheckingFactoryUtil
+            .<HeadersConfigurer.Factory, HeadersConfigurer>builder()
+            .expectedFactoryType(HeadersConfigurer.Factory.class)
+            .expectedReturnType(HeadersConfigurer.class)
+            .build();
+
     public ResponseHeadersConfigurerFactoryConfigurationProperties {
         if (argument == null) argument = "";
-        if (type == null) type = (Class) NoOpResponseHeadersConfigurerFactory.class;
+        if (type == null) type = NoOpResponseHeadersConfigurerFactory.class;
     }
 }
