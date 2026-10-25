@@ -1,6 +1,7 @@
 package ee.ristoseene.pki.mock.server.controller.configuration;
 
 import ee.ristoseene.pki.mock.server.controller.ServiceController;
+import ee.ristoseene.pki.mock.server.factory.FactoryContext;
 import ee.ristoseene.pki.mock.server.http.HttpMethod;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
@@ -8,7 +9,6 @@ import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
@@ -32,14 +32,14 @@ class ServicesConfiguration {
     @Bean
     Map<String, ServiceController> getServiceControllers(
             @Autowired(required = false) @Nullable MockConfigurationProperties configurationProperties,
-            ApplicationContext applicationContext
+            FactoryContext factoryContext
     ) {
-        return createServiceControllers(configurationProperties, applicationContext, HttpMethod.GET);
+        return createServiceControllers(configurationProperties, factoryContext, HttpMethod.GET);
     }
 
     private static Map<String, ServiceController> createServiceControllers(
             @Nullable MockConfigurationProperties configurationProperties,
-            ApplicationContext applicationContext,
+            FactoryContext factoryContext,
             HttpMethod httpMethod
     ) {
         if (configurationProperties == null || CollectionUtils.isEmpty(configurationProperties.endpoints())) {
@@ -69,7 +69,7 @@ class ServicesConfiguration {
             serviceControllers.put(
                     properties.path(),
                     ServiceFactoryConfigurationProperties.FACTORY_UTIL
-                            .create(properties.factory(), applicationContext)
+                            .create(properties.factory(), factoryContext)
             );
         }
 

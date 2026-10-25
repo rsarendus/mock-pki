@@ -6,7 +6,6 @@ import ee.ristoseene.pki.mock.server.factory.exception.FactoryInstantiationExcep
 import ee.ristoseene.pki.mock.server.factory.exception.FactoryReturnTypeMismatchException;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
-import org.springframework.context.ApplicationContext;
 
 import java.lang.reflect.Constructor;
 
@@ -15,12 +14,12 @@ public abstract class FactoryUtil<F extends Factory<? extends R>, R> {
 
     public final R create(
             FactoryConfigurationProperties<F, R> properties,
-            ApplicationContext applicationContext
+            FactoryContext context
     ) {
         validateFactoryTypePresence(properties.type());
         validateFactoryType(properties.type());
 
-        final F factory = createFactory(properties.type(), applicationContext);
+        final F factory = createFactory(properties.type(), context);
         validateFactoryObject(factory);
 
         final R returnValue = factory.create(properties.argument());
@@ -34,11 +33,11 @@ public abstract class FactoryUtil<F extends Factory<? extends R>, R> {
     protected abstract void validateFactoryObject(F factory);
     protected abstract void validateReturnValue(R returnValue);
 
-    private static <F extends Factory<? extends R>, R> F createFactory(Class<F> type, ApplicationContext applicationContext) {
+    private static <F extends Factory<? extends R>, R> F createFactory(Class<F> type, FactoryContext context) {
         try {
             return newInstanceOf(
-                    type.getConstructor(ApplicationContext.class),
-                    applicationContext
+                    type.getConstructor(FactoryContext.class),
+                    context
             );
         } catch (NoSuchMethodException e1) {
             try {
@@ -47,7 +46,7 @@ public abstract class FactoryUtil<F extends Factory<? extends R>, R> {
                 final FactoryException exception = new FactoryInstantiationException(String.format(
                         "The type '%s' does not have public constructors with either parameter types: [%s] nor []",
                         type.getCanonicalName(),
-                        ApplicationContext.class.getCanonicalName()
+                        FactoryContext.class.getCanonicalName()
                 ));
                 exception.addSuppressed(e1);
                 exception.addSuppressed(e2);

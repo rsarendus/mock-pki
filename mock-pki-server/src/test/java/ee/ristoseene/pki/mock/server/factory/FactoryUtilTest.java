@@ -13,7 +13,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
-import org.springframework.context.ApplicationContext;
 
 import java.util.stream.Stream;
 
@@ -35,16 +34,16 @@ public abstract class FactoryUtilTest {
     void create_WhenPropertiesDefineValidFactoryWithoutContextParameter_ReturnsExceptedValue(String argument) {
         FactoryUtil<MockFactory, MockReturnValue> factoryUtil = getFactoryUtilFor(MockFactory.class, MockReturnValue.class);
         FactoryConfigurationProperties<MockFactory, MockReturnValue> properties = mockFactoryConfigurationProperties();
-        ApplicationContext applicationContext = mock(ApplicationContext.class);
+        FactoryContext factoryContext = mock(FactoryContext.class);
         doReturn(ParameterlessMockFactory.class).when(properties).type();
         doReturn(argument).when(properties).argument();
 
-        MockReturnValue result = factoryUtil.create(properties, applicationContext);
+        MockReturnValue result = factoryUtil.create(properties, factoryContext);
 
         assertThat(result).isNotNull().isInstanceOf(MockReturnValue.class);
         assertThat(result.argument()).isSameAs(argument);
         assertThat(result.context()).isNull();
-        verifyNoInteractions(applicationContext);
+        verifyNoInteractions(factoryContext);
     }
 
     @ParameterizedTest
@@ -52,16 +51,16 @@ public abstract class FactoryUtilTest {
     void create_WhenPropertiesDefineValidFactoryWithContextParameter_ReturnsExceptedValue(String argument) {
         FactoryUtil<MockFactory, MockReturnValue> factoryUtil = getFactoryUtilFor(MockFactory.class, MockReturnValue.class);
         FactoryConfigurationProperties<MockFactory, MockReturnValue> properties = mockFactoryConfigurationProperties();
-        ApplicationContext applicationContext = mock(ApplicationContext.class);
+        FactoryContext factoryContext = mock(FactoryContext.class);
         doReturn(ParameterizedMockFactory.class).when(properties).type();
         doReturn(argument).when(properties).argument();
 
-        MockReturnValue result = factoryUtil.create(properties, applicationContext);
+        MockReturnValue result = factoryUtil.create(properties, factoryContext);
 
         assertThat(result).isNotNull().isInstanceOf(MockReturnValue.class);
         assertThat(result.argument()).isSameAs(argument);
-        assertThat(result.context()).isSameAs(applicationContext);
-        verifyNoInteractions(applicationContext);
+        assertThat(result.context()).isSameAs(factoryContext);
+        verifyNoInteractions(factoryContext);
     }
 
     static Stream<Class<? extends MockFactory>> withoutMatchingConstructorMockFactoryTypes() {
@@ -81,18 +80,18 @@ public abstract class FactoryUtilTest {
     void create_WhenPropertiesDefineFactoryWithoutMatchingConstructor_ThrowsException(Class<? extends MockFactory> factoryType) {
         FactoryUtil<MockFactory, MockReturnValue> factoryUtil = getFactoryUtilFor(MockFactory.class, MockReturnValue.class);
         FactoryConfigurationProperties<MockFactory, MockReturnValue> properties = mockFactoryConfigurationProperties();
-        ApplicationContext applicationContext = mock(ApplicationContext.class);
+        FactoryContext factoryContext = mock(FactoryContext.class);
         doReturn(factoryType).when(properties).type();
 
         assertThatException()
-                .isThrownBy(() -> factoryUtil.create(properties, applicationContext))
+                .isThrownBy(() -> factoryUtil.create(properties, factoryContext))
                 .isExactlyInstanceOf(FactoryInstantiationException.class)
                 .withMessage(
                         "The type '%s' does not have public constructors with either parameter types: [%s] nor []",
                         factoryType.getCanonicalName(),
-                        ApplicationContext.class.getCanonicalName()
+                        FactoryContext.class.getCanonicalName()
                 );
-        verifyNoInteractions(applicationContext);
+        verifyNoInteractions(factoryContext);
     }
 
     static Stream<Class<? extends MockFactory>> uninstantiableMockFactoryTypes() {
@@ -107,44 +106,44 @@ public abstract class FactoryUtilTest {
     void create_WhenPropertiesDefineUninstantiableFactory_ThrowsException(Class<? extends MockFactory> factoryType) {
         FactoryUtil<MockFactory, MockReturnValue> factoryUtil = getFactoryUtilFor(MockFactory.class, MockReturnValue.class);
         FactoryConfigurationProperties<MockFactory, MockReturnValue> properties = mockFactoryConfigurationProperties();
-        ApplicationContext applicationContext = mock(ApplicationContext.class);
+        FactoryContext factoryContext = mock(FactoryContext.class);
         doReturn(factoryType).when(properties).type();
 
         assertThatException()
-                .isThrownBy(() -> factoryUtil.create(properties, applicationContext))
+                .isThrownBy(() -> factoryUtil.create(properties, factoryContext))
                 .isExactlyInstanceOf(FactoryInstantiationException.class)
                 .withMessage(
                         "The type '%s' is not instantiable",
                         factoryType.getCanonicalName()
                 );
-        verifyNoInteractions(applicationContext);
+        verifyNoInteractions(factoryContext);
     }
 
     @Test
     void create_WhenPropertiesDefineNullFactory_ThrowsException() {
         FactoryUtil<MockFactory, MockReturnValue> factoryUtil = getFactoryUtilFor(MockFactory.class, MockReturnValue.class);
         FactoryConfigurationProperties<MockFactory, MockReturnValue> properties = mockFactoryConfigurationProperties();
-        ApplicationContext applicationContext = mock(ApplicationContext.class);
+        FactoryContext factoryContext = mock(FactoryContext.class);
 
         assertThatException()
-                .isThrownBy(() -> factoryUtil.create(properties, applicationContext))
+                .isThrownBy(() -> factoryUtil.create(properties, factoryContext))
                 .isExactlyInstanceOf(FactoryException.class)
                 .withMessage("Factory is null");
-        verifyNoInteractions(applicationContext);
+        verifyNoInteractions(factoryContext);
     }
 
     @Test
     void create_WhenPropertiesDefineFactoryThatReturnsNull_ThrowsException() {
         FactoryUtil<MockFactory, MockReturnValue> factoryUtil = getFactoryUtilFor(MockFactory.class, MockReturnValue.class);
         FactoryConfigurationProperties<MockFactory, MockReturnValue> properties = mockFactoryConfigurationProperties();
-        ApplicationContext applicationContext = mock(ApplicationContext.class);
+        FactoryContext factoryContext = mock(FactoryContext.class);
         doReturn(NullReturningMockFactory.class).when(properties).type();
 
         assertThatException()
-                .isThrownBy(() -> factoryUtil.create(properties, applicationContext))
+                .isThrownBy(() -> factoryUtil.create(properties, factoryContext))
                 .isExactlyInstanceOf(FactoryReturnTypeMismatchException.class)
                 .withMessage("Factory returned null");
-        verifyNoInteractions(applicationContext);
+        verifyNoInteractions(factoryContext);
     }
 
     @SuppressWarnings("unchecked")
@@ -152,7 +151,7 @@ public abstract class FactoryUtilTest {
         return (FactoryConfigurationProperties<F, R>) mock(FactoryConfigurationProperties.class);
     }
 
-    record MockReturnValue(String argument, ApplicationContext context) {}
+    record MockReturnValue(String argument, FactoryContext context) {}
 
     interface MockFactory extends Factory<MockReturnValue> {}
 
@@ -168,10 +167,10 @@ public abstract class FactoryUtilTest {
     @NullMarked
     @RequiredArgsConstructor(access = AccessLevel.PUBLIC)
     static class ParameterizedMockFactory implements MockFactory {
-        private final ApplicationContext applicationContext;
+        private final FactoryContext factoryContext;
         @Override
         public MockReturnValue create(String argument) {
-            return new MockReturnValue(argument, applicationContext);
+            return new MockReturnValue(argument, factoryContext);
         }
     }
 
@@ -187,10 +186,10 @@ public abstract class FactoryUtilTest {
     @NullMarked
     @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
     static class PrivateParameterizedMockFactory implements MockFactory {
-        private final ApplicationContext applicationContext;
+        private final FactoryContext factoryContext;
         @Override
         public MockReturnValue create(String argument) {
-            return new MockReturnValue(argument, applicationContext);
+            return new MockReturnValue(argument, factoryContext);
         }
     }
 
@@ -206,10 +205,10 @@ public abstract class FactoryUtilTest {
     @NullMarked
     @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
     static class ProtectedParameterizedMockFactory implements MockFactory {
-        private final ApplicationContext applicationContext;
+        private final FactoryContext factoryContext;
         @Override
         public MockReturnValue create(String argument) {
-            return new MockReturnValue(argument, applicationContext);
+            return new MockReturnValue(argument, factoryContext);
         }
     }
 
@@ -225,10 +224,10 @@ public abstract class FactoryUtilTest {
     @NullMarked
     @RequiredArgsConstructor(access = AccessLevel.PACKAGE)
     static class PackagePrivateParameterizedMockFactory implements MockFactory {
-        private final ApplicationContext applicationContext;
+        private final FactoryContext factoryContext;
         @Override
         public MockReturnValue create(String argument) {
-            return new MockReturnValue(argument, applicationContext);
+            return new MockReturnValue(argument, factoryContext);
         }
     }
 
@@ -241,7 +240,7 @@ public abstract class FactoryUtilTest {
     @SuppressWarnings("unused")
     @RequiredArgsConstructor(access = AccessLevel.PUBLIC)
     static abstract class AbstractParameterizedMockFactory implements MockFactory {
-        private final ApplicationContext applicationContext;
+        private final FactoryContext factoryContext;
     }
 
     @NullMarked

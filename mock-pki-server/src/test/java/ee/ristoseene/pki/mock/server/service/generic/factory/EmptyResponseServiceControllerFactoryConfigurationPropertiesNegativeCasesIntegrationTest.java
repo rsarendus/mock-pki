@@ -1,5 +1,6 @@
 package ee.ristoseene.pki.mock.server.service.generic.factory;
 
+import ee.ristoseene.pki.mock.server.factory.FactoryContext;
 import ee.ristoseene.pki.mock.server.factory.configuration.AbstractApplicationContextDependantFactoryIntegrationTest;
 import ee.ristoseene.pki.mock.server.factory.exception.FactoryTypeMismatchException;
 import ee.ristoseene.pki.mock.server.factory.exception.NestedConfigurationBindException;
@@ -127,7 +128,9 @@ class EmptyResponseServiceControllerFactoryConfigurationPropertiesNegativeCasesI
     }
 
     private void run(Consumer<EmptyResponseServiceControllerFactory> factoryConsumer) {
-        runInContext(context -> factoryConsumer.accept(new EmptyResponseServiceControllerFactory(context)));
+        runInContext(context -> factoryConsumer.accept(
+                new EmptyResponseServiceControllerFactory(context.getBean(FactoryContext.class))
+        ));
     }
 
 }

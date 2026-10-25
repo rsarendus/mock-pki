@@ -5,9 +5,9 @@ import lombok.Getter;
 import org.jspecify.annotations.NullMarked;
 import org.junit.jupiter.api.Assertions;
 import org.springframework.boot.autoconfigure.AutoConfigurations;
+import org.springframework.boot.test.context.assertj.AssertableApplicationContext;
 import org.springframework.boot.test.context.runner.ApplicationContextRunner;
 import org.springframework.boot.validation.autoconfigure.ValidationAutoConfiguration;
-import org.springframework.context.ApplicationContext;
 
 public abstract class AbstractApplicationContextDependantFactoryIntegrationTest {
 
@@ -39,7 +39,7 @@ public abstract class AbstractApplicationContextDependantFactoryIntegrationTest 
     @NullMarked
     @FunctionalInterface
     protected interface InContextExecutable {
-        void execute(ApplicationContext context) throws Exception;
+        void execute(AssertableApplicationContext context) throws Exception;
     }
 
 }

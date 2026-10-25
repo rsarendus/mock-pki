@@ -9,7 +9,6 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.collections4.CollectionUtils;
 import org.jspecify.annotations.NullMarked;
-import org.springframework.context.ApplicationContext;
 import tools.jackson.dataformat.yaml.YAMLMapper;
 
 import java.util.Set;
@@ -21,9 +20,9 @@ public abstract class AbstractYamlParsingFactory<R> implements Factory<R> {
     private final YAMLMapper yamlMapper;
     private final Validator validator;
 
-    protected AbstractYamlParsingFactory(@NonNull ApplicationContext applicationContext) {
-        yamlMapper = applicationContext.getBean("factoryConfigurationArgumentYamlMapper", YAMLMapper.class);
-        validator = applicationContext.getBean(Validator.class);
+    protected AbstractYamlParsingFactory(@NonNull FactoryContext context) {
+        yamlMapper = context.get(YAMLMapper.class);
+        validator = context.get(Validator.class);
     }
 
     protected final <T> T parseAndValidate(String argument, Class<T> type) {

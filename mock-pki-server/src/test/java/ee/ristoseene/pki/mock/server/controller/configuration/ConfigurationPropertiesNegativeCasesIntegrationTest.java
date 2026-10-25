@@ -1,8 +1,10 @@
 package ee.ristoseene.pki.mock.server.controller.configuration;
 
 import ee.ristoseene.pki.mock.server.controller.ServiceController;
+import ee.ristoseene.pki.mock.server.factory.configuration.AbstractApplicationContextDependantFactoryIntegrationTest;
 import ee.ristoseene.pki.mock.server.factory.exception.FactoryTypeMismatchException;
 import ee.ristoseene.pki.mock.server.http.HttpMethod;
+import org.jspecify.annotations.NullMarked;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
@@ -10,7 +12,7 @@ import org.springframework.boot.test.context.runner.ApplicationContextRunner;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class ConfigurationPropertiesNegativeCasesIntegrationTest {
+class ConfigurationPropertiesNegativeCasesIntegrationTest extends AbstractApplicationContextDependantFactoryIntegrationTest {
 
     private static final String PROPERTY_KEY_FACTORY_ARGUMENT = "mock.endpoints[0].factory.argument=";
     private static final String PROPERTY_KEY_FACTORY_TYPE = "mock.endpoints[0].factory.type=";
@@ -25,13 +27,16 @@ class ConfigurationPropertiesNegativeCasesIntegrationTest {
     private static final String PROPERTY_FACTORY_TYPE = PROPERTY_KEY_FACTORY_TYPE + PROPERTY_VALUE_FACTORY_TYPE;
     private static final String PROPERTY_PATH = PROPERTY_KEY_PATH + PROPERTY_VALUE_PATH;
 
-    private final ApplicationContextRunner applicationContextRunner = new ApplicationContextRunner()
-                .withUserConfiguration(ServicesConfiguration.class);
+    @Override
+    @NullMarked
+    protected ApplicationContextRunner configureApplicationContextRunner(ApplicationContextRunner applicationContextRunner) {
+        return applicationContextRunner.withUserConfiguration(ServicesConfiguration.class);
+    }
 
     @ParameterizedTest
     @EnumSource(HttpMethod.class)
     void missingFactoryProperty(HttpMethod httpMethod) {
-        applicationContextRunner
+        getApplicationContextRunner()
                 .withPropertyValues(PROPERTY_KEY_METHOD + httpMethod.name())
                 .withPropertyValues(PROPERTY_PATH)
                 .run(context -> assertThat(context)
@@ -45,7 +50,7 @@ class ConfigurationPropertiesNegativeCasesIntegrationTest {
     @ParameterizedTest
     @EnumSource(HttpMethod.class)
     void missingFactoryTypeProperty(HttpMethod httpMethod) {
-        applicationContextRunner
+        getApplicationContextRunner()
                 .withPropertyValues(PROPERTY_FACTORY_ARGUMENT)
                 .withPropertyValues(PROPERTY_KEY_METHOD + httpMethod.name())
                 .withPropertyValues(PROPERTY_PATH)
@@ -60,7 +65,7 @@ class ConfigurationPropertiesNegativeCasesIntegrationTest {
     @ParameterizedTest
     @EnumSource(HttpMethod.class)
     void invalidFactoryTypeProperty(HttpMethod httpMethod) {
-        applicationContextRunner
+        getApplicationContextRunner()
                 .withPropertyValues(PROPERTY_KEY_FACTORY_TYPE + "FooBar")
                 .withPropertyValues(PROPERTY_KEY_METHOD + httpMethod.name())
                 .withPropertyValues(PROPERTY_PATH)
@@ -74,7 +79,7 @@ class ConfigurationPropertiesNegativeCasesIntegrationTest {
     @ParameterizedTest
     @EnumSource(HttpMethod.class)
     void incompatibleFactoryTypeProperty(HttpMethod httpMethod) {
-        applicationContextRunner
+        getApplicationContextRunner()
                 .withPropertyValues(PROPERTY_KEY_FACTORY_TYPE + IncompatibleFactory.class.getCanonicalName())
                 .withPropertyValues(PROPERTY_KEY_METHOD + httpMethod.name())
                 .withPropertyValues(PROPERTY_PATH)
@@ -92,7 +97,7 @@ class ConfigurationPropertiesNegativeCasesIntegrationTest {
 
     @Test
     void missingMethodProperty() {
-        applicationContextRunner
+        getApplicationContextRunner()
                 .withPropertyValues(PROPERTY_FACTORY_TYPE)
                 .withPropertyValues(PROPERTY_PATH)
                 .run(context -> assertThat(context)
@@ -105,7 +110,7 @@ class ConfigurationPropertiesNegativeCasesIntegrationTest {
 
     @Test
     void invalidMethodProperty() {
-        applicationContextRunner
+        getApplicationContextRunner()
                 .withPropertyValues(PROPERTY_FACTORY_TYPE)
                 .withPropertyValues(PROPERTY_KEY_METHOD + "INVALID")
                 .withPropertyValues(PROPERTY_PATH)
@@ -122,7 +127,7 @@ class ConfigurationPropertiesNegativeCasesIntegrationTest {
     @ParameterizedTest
     @EnumSource(HttpMethod.class)
     void missingPathProperty(HttpMethod httpMethod) {
-        applicationContextRunner
+        getApplicationContextRunner()
                 .withPropertyValues(PROPERTY_FACTORY_TYPE)
                 .withPropertyValues(PROPERTY_KEY_METHOD + httpMethod.name())
                 .run(context -> assertThat(context)

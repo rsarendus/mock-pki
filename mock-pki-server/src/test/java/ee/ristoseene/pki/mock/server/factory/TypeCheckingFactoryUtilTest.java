@@ -9,7 +9,6 @@ import org.jspecify.annotations.NullMarked;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
-import org.springframework.context.ApplicationContext;
 
 import java.util.stream.Stream;
 
@@ -44,36 +43,36 @@ class TypeCheckingFactoryUtilTest extends FactoryUtilTest {
     void create_WhenPropertiesDefineFactoryOfIncompatibleType_ThrowsException(Class<?> factoryType) {
         FactoryUtil<MockFactory, MockReturnValue> factoryUtil = getFactoryUtilFor(MockFactory.class, MockReturnValue.class);
         FactoryConfigurationProperties<MockFactory, MockReturnValue> properties = mockFactoryConfigurationProperties();
-        ApplicationContext applicationContext = mock(ApplicationContext.class);
+        FactoryContext factoryContext = mock(FactoryContext.class);
         doReturn(factoryType).when(properties).type();
 
         assertThatException()
-                .isThrownBy(() -> factoryUtil.create(properties, applicationContext))
+                .isThrownBy(() -> factoryUtil.create(properties, factoryContext))
                 .isExactlyInstanceOf(FactoryTypeMismatchException.class)
                 .withMessage(
                         "The factory type '%s' is not compatible with the expected factory type '%s'",
                         factoryType.getCanonicalName(),
                         MockFactory.class.getCanonicalName()
                 );
-        verifyNoInteractions(applicationContext);
+        verifyNoInteractions(factoryContext);
     }
 
     @Test
     void create_WhenPropertiesDefineFactoryReturningIncompatibleValue_ThrowsException() {
         FactoryUtil<ObjectFactory, Object> factoryUtil = getFactoryUtilFor(ObjectFactory.class, String.class);
         FactoryConfigurationProperties<ObjectFactory, Object> properties = mockFactoryConfigurationProperties();
-        ApplicationContext applicationContext = mock(ApplicationContext.class);
+        FactoryContext factoryContext = mock(FactoryContext.class);
         doReturn(ObjectFactory.class).when(properties).type();
 
         assertThatException()
-                .isThrownBy(() -> factoryUtil.create(properties, applicationContext))
+                .isThrownBy(() -> factoryUtil.create(properties, factoryContext))
                 .isExactlyInstanceOf(FactoryReturnTypeMismatchException.class)
                 .withMessage(
                         "The returned value of type '%s' is not compatible with the expected return type '%s'",
                         Object.class.getCanonicalName(),
                         String.class.getCanonicalName()
                 );
-        verifyNoInteractions(applicationContext);
+        verifyNoInteractions(factoryContext);
     }
 
     record MockReturnValue() {}

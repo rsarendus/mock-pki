@@ -2,6 +2,7 @@ package ee.ristoseene.pki.mock.server.service.generic.factory;
 
 import ee.ristoseene.pki.mock.server.controller.ServiceController;
 import ee.ristoseene.pki.mock.server.factory.AbstractYamlParsingFactory;
+import ee.ristoseene.pki.mock.server.factory.FactoryContext;
 import ee.ristoseene.pki.mock.server.http.annotation.HttpStatusCode;
 import ee.ristoseene.pki.mock.server.http.header.HeadersConfigurer;
 import ee.ristoseene.pki.mock.server.http.header.configuration.ResponseHeadersConfigurerFactoryConfigurationProperties;
@@ -11,7 +12,6 @@ import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.NullUnmarked;
-import org.springframework.context.ApplicationContext;
 
 /// A factory for creating instances of {@link ServiceController} implementations that:
 ///
@@ -32,12 +32,12 @@ import org.springframework.context.ApplicationContext;
 @NullMarked
 public class EmptyResponseServiceControllerFactory extends AbstractYamlParsingFactory<ServiceController> implements ServiceController.Factory {
 
-    private final ApplicationContext applicationContext;
+    private final FactoryContext factoryContext;
 
-    public EmptyResponseServiceControllerFactory(@NonNull ApplicationContext applicationContext) {
-        super(applicationContext);
+    public EmptyResponseServiceControllerFactory(@NonNull FactoryContext factoryContext) {
+        super(factoryContext);
 
-        this.applicationContext = applicationContext;
+        this.factoryContext = factoryContext;
     }
 
     @Override
@@ -55,7 +55,7 @@ public class EmptyResponseServiceControllerFactory extends AbstractYamlParsingFa
         );
 
         final HeadersConfigurer headersConfigurer = ResponseHeadersConfigurerFactoryConfigurationProperties.FACTORY_UTIL
-                .create(configurationProperties.httpHeadersConfigurerFactory(), applicationContext);
+                .create(configurationProperties.httpHeadersConfigurerFactory(), factoryContext);
 
         return (input, output) -> output
                 .withHttpStatus(httpStatus)
